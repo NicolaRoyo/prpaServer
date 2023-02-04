@@ -9,6 +9,22 @@ var usersRouter = require('./routes/users');
 const directoryRouter = require('./routes/directoryRouter');
 const partnershipRouter = require('./partnershipRouter');
 
+const mongoose = require('mongoose');
+
+const url = 'mongodb://localhost:27017/prpachicago';
+const connect = mongoose.connect(url, {
+  useCreateIndex: true,
+  useFindAndModify: false,
+  useNewUrlParser: true, 
+  useUnifiedTopology: true
+});
+
+connect.then(() => console.log('Connected correctly to server'), 
+  err => console.log(err)
+);
+
+//another way to handle promise rejections instead of the catch method.  Catch method is more common
+
 var app = express();
 
 // view engine setup
