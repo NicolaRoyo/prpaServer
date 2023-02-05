@@ -1,15 +1,11 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const eventSchema = new Schema({
+const partnershipSchema = new Schema({
     name: {
         type: String,
         required: true,
-        unique: false
-    },
-    description: {
-        type: String,
-        required: true
+        unique: true
     },
     image: {
         type: String,
@@ -18,11 +14,16 @@ const eventSchema = new Schema({
     featured: {
         type: Boolean,
         default: false
-    }
+    },
+    description: {
+        type: String,
+        required: true
+    },
+    
 }, {
     timestamps: true
 });
 
-const Event = mongoose.model('Event', eventSchema);
+const Partnership = mongoose.model('Partnership', partnershipSchema);
 
-module.exports = Event;
+module.exports = Partnership;

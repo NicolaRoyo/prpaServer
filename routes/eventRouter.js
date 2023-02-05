@@ -1,13 +1,12 @@
 // sort out event/directory and outreach wording to sync with 
 
 const express = require('express');
-const { events } = require('../models/event');
 const Event = require('../models/event');
 
 
-const directoryRouter = express.Router();
+const eventRouter = express.Router();
 
-directoryRouter.route('/')
+eventRouter.route('/')
 // .all((req, res, next) => {
 //     res.statusCode = 200;
 //     res.setHeader('Content-Type', 'text/plain');
@@ -34,7 +33,7 @@ directoryRouter.route('/')
 })
 .put((req, res) => {
     res.statusCode = 403;
-    res.end('PUT operation not supported on /directory');
+    res.end('PUT operation not supported on /events');
 })
 .delete((req, res, next) => {
     Event.deleteMany()
@@ -47,9 +46,9 @@ directoryRouter.route('/')
 });
 
 //will add other types of events besides the outreach 
-directoryRouter.route('/directory/:eventOutreachId')
+eventRouter.route('/:eventId')
 .get((req, res, next) => {
-    Event.findById(req.params.eventOutreachId)
+    Event.findById(req.params.eventId)
     .then(event => {
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');
@@ -59,10 +58,10 @@ directoryRouter.route('/directory/:eventOutreachId')
 })
 .post((req, res) => {
     res.statusCode = 403;
-    res.end(`POST operation not supported on /directory/${req.params.eventOutreachId}`);
+    res.end(`POST operation not supported on /event/${req.params.eventId}`);
 })
 .put((req, res, next) => {
-    Event.findByIdAndUpdate(req.params.eventOutreachId, {
+    Event.findByIdAndUpdate(req.params.eventId, {
         $set: req.body
     }, { new: true })
     .then(event => {
@@ -73,7 +72,7 @@ directoryRouter.route('/directory/:eventOutreachId')
     .catch(err => next(err));
 })
 .delete((req, res) => {
-    res.end(`Deleting event: ${req.params.eventOutreachId}`);
+    res.end(`Deleting event: ${req.params.eventId}`);
 });
 
-module.exports = directoryRouter;
+module.exports = eventRouter;

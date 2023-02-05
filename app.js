@@ -6,12 +6,13 @@ var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-const directoryRouter = require('./routes/directoryRouter');
-const partnershipRouter = require('./partnershipRouter');
+const eventRouter = require('./routes/eventRouter');
+const partnershipRouter = require('./routes/partnershipRouter');
+const boardRouter = require('./routes/boardRouter');
 
 const mongoose = require('mongoose');
 
-const url = 'mongodb://localhost:27017/prpachicago';
+const url = 'mongodb://localhost:27017/prpa';
 const connect = mongoose.connect(url, {
   useCreateIndex: true,
   useFindAndModify: false,
@@ -39,8 +40,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
-app.use('/directory', directoryRouter);
+app.use('/events', eventRouter);
 app.use('/partnerships', partnershipRouter);
+app.use('/boardmembers', boardRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
