@@ -8,7 +8,7 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 const eventRouter = require('./routes/eventRouter');
 const partnershipRouter = require('./routes/partnershipRouter');
-const boardRouter = require('./routes/boardRouter');
+const boardMemberRouter = require('./routes/boardMemberRouter');
 
 const mongoose = require('mongoose');
 
@@ -42,7 +42,7 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/events', eventRouter);
 app.use('/partnerships', partnershipRouter);
-app.use('/boardmembers', boardRouter);
+app.use('/boardmembers', boardMemberRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
