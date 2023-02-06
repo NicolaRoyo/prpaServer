@@ -2,7 +2,7 @@
 
 const express = require('express');
 const Event = require('../models/event');
-
+const authenticate = require('../authenticate');
 
 const eventRouter = express.Router();
 
@@ -21,7 +21,7 @@ eventRouter.route('/')
     })
     .catch(err => next(err));
 })
-.post((req, res, next) => {
+.post(authenticate.verifyUser, (req, res, next) => {
     Event.create(req.body)
     .then(event => {
         console.log('Event Created ', event);
@@ -31,11 +31,11 @@ eventRouter.route('/')
     })
     .catch(err => next(err));
 })
-.put((req, res) => {
+.put(authenticate.verifyUser, (req, res) => {
     res.statusCode = 403;
     res.end('PUT operation not supported on /events');
 })
-.delete((req, res, next) => {
+.delete(authenticate.verifyUser, (req, res, next) => {
     Event.deleteMany()
     .then(response => {
         res.statusCode = 200;
@@ -56,11 +56,11 @@ eventRouter.route('/:eventId')
     })
     .catch(err => next(err));
 })
-.post((req, res) => {
+.post(authenticate.verifyUser, (req, res) => {
     res.statusCode = 403;
     res.end(`POST operation not supported on /event/${req.params.eventId}`);
 })
-.put((req, res, next) => {
+.put(authenticate.verifyUser, (req, res, next) => {
     Event.findByIdAndUpdate(req.params.eventId, {
         $set: req.body
     }, { new: true })
@@ -71,7 +71,7 @@ eventRouter.route('/:eventId')
     })
     .catch(err => next(err));
 })
-.delete((req, res) => {
+.delete(authenticate.verifyUser, (req, res) => {
     res.end(`Deleting event: ${req.params.eventId}`);
 });
 
