@@ -14,7 +14,7 @@ boardMemberRouter.route('/')
     })
     .catch(err => next(err));
 })
-.post(authenticate.verifyUser, (req, res, next) => {
+.post(authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
     BoardMember.create(req.body)
     .then(boardMember => {
         console.log('Board Member Added', boardMember);
@@ -24,11 +24,11 @@ boardMemberRouter.route('/')
     })
     .catch(err => next(err));
 })
-.put((req, res) => {
+.put(authenticate.verifyUser, authenticate.verifyAdmin, (req, res) => {
     res.statusCode = 403;
     res.end('PUT operation not supported on /boardmembers');
 })
-.delete(authenticate.verifyUser, (req, res, next) => {
+.delete(authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
     BoardMember.deleteMany()
     .then(response => {
         res.statusCode = 200;
@@ -48,11 +48,11 @@ boardMemberRouter.route('/:boardMemberId')
     })
     .catch(err => next(err));
 })
-.post(authenticate.verifyUser, (req, res) => {
+.post(authenticate.verifyUser, authenticate.verifyAdmin, (req, res) => {
     res.statusCode = 403;
     res.end(`POST operation not supported on /boardmembers/${req.params.boardMemberId}`);
 })
-.put(authenticate.verifyUser,(req, res, next) => {
+.put(authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
     BoardMember.findByIdAndUpdate(req.params.boardMemberId, {
         $set: req.body
     }, { new: true })
@@ -63,7 +63,7 @@ boardMemberRouter.route('/:boardMemberId')
     })
     .catch(err => next(err));
 })
-.delete(authenticate.verifyUser, (req, res) => {
+.delete(authenticate.verifyUser, authenticate.verifyAdmin, (req, res) => {
     res.end(`Deleting board member: ${req.params.boardMemberId}`);
 });
 
