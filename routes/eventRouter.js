@@ -3,11 +3,13 @@
 const express = require('express');
 const Event = require('../models/event');
 const authenticate = require('../authenticate');
+const cors = require('./cors');
 
 const eventRouter = express.Router();
 
 eventRouter.route('/')
-.get((req, res, next) => {
+.options(cors.corsWithOptions, (req, res) => res.sendStatus(200))
+.get(cors.cors, (req, res, next) => {
     Event.find()
     .then(events => {
         res.statusCode = 200;
@@ -16,7 +18,7 @@ eventRouter.route('/')
     })
     .catch(err => next(err));
 })
-.post(authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
+.post(cors.corsWithOptions, authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
     Event.create(req.body)
     .then(event => {
         console.log('Event Created ', event);
@@ -26,11 +28,11 @@ eventRouter.route('/')
     })
     .catch(err => next(err));
 })
-.put(authenticate.verifyUser, authenticate.verifyAdmin, (req, res) => {
+.put(cors.corsWithOptions, authenticate.verifyUser, authenticate.verifyAdmin, (req, res) => {
     res.statusCode = 403;
     res.end('PUT operation not supported on /events');
 })
-.delete(authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
+.delete(cors.corsWithOptions, authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
     Event.deleteMany()
     .then(response => {
         res.statusCode = 200;
@@ -42,7 +44,8 @@ eventRouter.route('/')
 
 //will add other types of events besides the outreach 
 eventRouter.route('/:eventId')
-.get((req, res, next) => {
+.options(cors.corsWithOptions, (req, res) => res.sendStatus(200))
+.get(cors.cors, (req, res, next) => {
     Event.findById(req.params.eventId)
     .then(event => {
         res.statusCode = 200;
@@ -51,11 +54,11 @@ eventRouter.route('/:eventId')
     })
     .catch(err => next(err));
 })
-.post(authenticate.verifyUser, authenticate.verifyAdmin, (req, res) => {
+.post(cors.corsWithOptions, authenticate.verifyUser, authenticate.verifyAdmin, (req, res) => {
     res.statusCode = 403;
     res.end(`POST operation not supported on /event/${req.params.eventId}`);
 })
-.put(authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
+.put(cors.corsWithOptions, authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
     Event.findByIdAndUpdate(req.params.eventId, {
         $set: req.body
     }, { new: true })
@@ -66,7 +69,7 @@ eventRouter.route('/:eventId')
     })
     .catch(err => next(err));
 })
-.delete(authenticate.verifyUser, authenticate.verifyAdmin, (req, res) => {
+.delete(cors.corsWithOptions, authenticate.verifyUser, authenticate.verifyAdmin, (req, res) => {
     res.end(`Deleting event: ${req.params.eventId}`);
 });
 

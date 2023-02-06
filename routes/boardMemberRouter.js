@@ -1,11 +1,13 @@
 const express = require('express');
 const BoardMember = require('../models/boardMember');
 const authenticate = require('../authenticate');
+const cors = require('./cors');
 
 const boardMemberRouter = express.Router();
 
 boardMemberRouter.route('/')
-.get((req, res) => {
+.options(cors.corsWithOptions, (req, res) => res.sendStatus(200))
+.get(cors.cors,(req, res) => {
     BoardMember.find()
     .then(boardMembers => {
         res.statusCode = 200;
@@ -39,7 +41,8 @@ boardMemberRouter.route('/')
 });
 
 boardMemberRouter.route('/:boardMemberId')
-.get((req, res, next) => {
+.options(cors.corsWithOptions, (req, res) => res.sendStatus(200))
+.get(cors.cors, (req, res, next) => {
     BoardMember.findById(req.params.boardMemberId)
     .then(boardMember => {
         res.statusCode = 200;
