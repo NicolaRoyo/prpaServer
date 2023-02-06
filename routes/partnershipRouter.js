@@ -1,5 +1,6 @@
 const express = require('express');
 const Partnership = require('../models/partnership');
+const authenticate = require('../authenticate');
 
 const partnershipRouter = express.Router();
 

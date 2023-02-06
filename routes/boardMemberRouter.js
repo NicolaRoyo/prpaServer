@@ -1,5 +1,6 @@
 const express = require('express');
-const BoardMember = require('../models/boardMember')
+const BoardMember = require('../models/boardMember');
+const authenticate = require('../authenticate');
 
 const boardMemberRouter = express.Router();
 
